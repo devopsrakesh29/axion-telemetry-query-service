@@ -3,7 +3,7 @@ environment: int
 replicaCount: 1
 
 image:
-  repository: rakeshacr01.azurecr.io/axion-telemetry-query-service
+  repository: rakeshacr01.azurecr.io/int-axion-telemetry-query-service
   pullPolicy: Always
   tag: "int-latest"
 

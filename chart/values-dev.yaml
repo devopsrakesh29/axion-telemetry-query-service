@@ -3,7 +3,7 @@ environment: dev
 replicaCount: 1
 
 image:
-  repository: rakeshacr01.azurecr.io/axion-telemetry-query-service
+  repository: rakeshacr01.azurecr.io/dev-axion-telemetry-query-service
   pullPolicy: Always
   tag: "dev-latest"
 
