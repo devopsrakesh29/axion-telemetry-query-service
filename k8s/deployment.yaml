@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: axion-telemetry-query-service
+  labels:
+    app: axion-telemetry-query-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: axion-telemetry-query-service
+  template:
+    metadata:
+      labels:
+        app: axion-telemetry-query-service
+    spec:
+      containers:
+        - name: axion-telemetry-query-service
+          image: rakeshacr01.azurecr.io/axion-telemetry-query-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://axion_user:Axiondb%401234@axion-db-service.default.svc.cluster.local:5432/axion_db"
+          livenessProbe:
+            httpGet:
+              path: /dashboard/summary
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /dashboard/summary
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

@@ -1,0 +1,47 @@
+environment: dev
+
+replicaCount: 1
+
+image:
+  repository: rakeshacr01.azurecr.io/axion-telemetry-query-service
+  pullPolicy: Always
+  tag: "dev-latest"
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: false
+  className: kong
+  hosts:
+    - host: dev-query.axion.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+env:
+  DATABASE_URL: "postgresql://axion_user:Axiondb%401234@axion-db-service.default.svc.cluster.local:5432/axion_db"
+
+livenessProbe:
+  httpGet:
+    path: /dashboard/summary
+    port: 8000
+  initialDelaySeconds: 10
+  periodSeconds: 15
+
+readinessProbe:
+  httpGet:
+    path: /dashboard/summary
+    port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
